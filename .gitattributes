@@ -1,0 +1,4 @@
+# Force unix-style line endings for front-end source files
+src/web/**/*.js text eol=lf
+src/web/**/*.json text eol=lf
+src/web/**/*.css text eol=lf

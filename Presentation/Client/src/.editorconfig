@@ -1,0 +1,20 @@
+root = true
+
+# Unix-style line endings, and a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# Set defaults for all files
+[*.{js, css, json, html}]
+charset = utf-8
+indent_style = space
+trim_trailing_whitespace = true
+
+# 4-space indentation for all JavaScript files
+[*.js]
+indent_size = 4
+
+# 2-space indentation for stylesheets and JSON files
+[*.{css, json, html}]
+indent_size = 2
