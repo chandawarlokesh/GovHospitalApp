@@ -1,13 +1,13 @@
-using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Models;
-using GovHospitalApp.Core.Application.Interface;
-using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Hospitals.Models;
+using Application.Interfaces;
+using MediatR;
 
-namespace GovHospitalApp.Core.Application.Infrastructure.Hospitals.Queries
+namespace Application.Hospitals.Queries
 {
     public sealed class GetHospitals
     {
@@ -22,7 +22,7 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Hospitals.Queries
             public Handler(IAppDbRepository appDbRepository)
             {
                 _appDbRepository = appDbRepository ??
-                                            throw new ArgumentNullException(nameof(appDbRepository));
+                                   throw new ArgumentNullException(nameof(appDbRepository));
             }
 
             public async Task<IEnumerable<Hospital>> Handle(Query request, CancellationToken cancellationToken)

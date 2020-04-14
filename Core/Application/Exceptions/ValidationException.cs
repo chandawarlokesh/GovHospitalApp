@@ -1,16 +1,14 @@
-using FluentValidation.Results;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 
-namespace GovHospitalApp.Core.Application.Exceptions
+namespace Application.Exceptions
 {
     public sealed class ValidationException : PublicException
     {
-        public Dictionary<string, string[]> Failures { get; }
         public ValidationException()
             : base("One or more validation failures have occurred.")
         {
-
             Failures = new Dictionary<string, string[]>();
         }
 
@@ -31,5 +29,6 @@ namespace GovHospitalApp.Core.Application.Exceptions
             }
         }
 
+        public Dictionary<string, string[]> Failures { get; }
     }
 }

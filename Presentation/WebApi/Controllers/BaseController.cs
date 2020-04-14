@@ -1,24 +1,24 @@
+using System;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 
-namespace GovHospitalApp.Controllers
+namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public abstract class BaseController : ControllerBase
     {
-        public readonly ILogger _logger;
+        public readonly ILogger Logger;
 
-        public readonly IMediator _mediator;
+        public readonly IMediator Mediator;
 
-        public BaseController(IMediator mediator, ILogger logger)
+        protected BaseController(IMediator mediator, ILogger logger)
         {
-            _logger = logger ??
-            throw new ArgumentNullException(nameof(logger));
-            _mediator = mediator ??
-            throw new ArgumentNullException(nameof(mediator));
+            Logger = logger ??
+                      throw new ArgumentNullException(nameof(logger));
+            Mediator = mediator ??
+                        throw new ArgumentNullException(nameof(mediator));
         }
     }
 }

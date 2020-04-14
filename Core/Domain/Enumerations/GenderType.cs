@@ -1,4 +1,4 @@
-namespace GovHospitalApp.Core.Domain.Enumerations
+namespace Domain.Enumerations
 {
     public enum GenderType
     {

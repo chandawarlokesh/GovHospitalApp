@@ -1,12 +1,13 @@
-using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Models;
-using GovHospitalApp.Core.Application.Interface;
-using MediatR;
-using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Hospitals.Models;
+using Application.Interfaces;
+using MediatR;
+using Newtonsoft.Json;
+using Hospital = Domain.Entities.Hospital;
 
-namespace GovHospitalApp.Core.Application.Infrastructure.Hospitals.Commands
+namespace Application.Hospitals.Commands
 {
     public sealed class SaveHospital
     {
@@ -32,18 +33,18 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Hospitals.Commands
             public Handler(IAppDbRepository appDbRepository)
             {
                 _appDbRepository = appDbRepository ??
-                                            throw new ArgumentNullException(nameof(appDbRepository));
+                                   throw new ArgumentNullException(nameof(appDbRepository));
             }
 
             public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
             {
                 var hospitalId = Guid.NewGuid();
-                var hospital = new Domain.Entities.Hospital()
+                var hospital = new Hospital
                 {
                     HospitalId = hospitalId,
                     Name = request.Name,
                     MobileNumber = request.MobileNumber,
-                    Address = new Domain.Entities.Address()
+                    Address = new Domain.Entities.Address
                     {
                         Street = request.Address.Street,
                         City = request.Address.City,

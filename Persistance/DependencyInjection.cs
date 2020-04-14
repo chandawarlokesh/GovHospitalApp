@@ -1,15 +1,14 @@
-using GovHospitalApp.Core.Application.Interface;
-using GovHospitalApp.Core.Infrastructure.Persistance;
+using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GovHospitalApp.Persistance
+namespace Persistence
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services,
-        IConfiguration configuration)
+            IConfiguration configuration)
         {
             // services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("GovHospitalApp"));
 

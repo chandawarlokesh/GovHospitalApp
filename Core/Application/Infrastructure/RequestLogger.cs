@@ -1,9 +1,9 @@
-using MediatR.Pipeline;
-using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR.Pipeline;
+using Microsoft.Extensions.Logging;
 
-namespace GovHospitalApp.Core.Application.Infrastructure
+namespace Application.Infrastructure
 {
     public class RequestLogger<TRequest> : IRequestPreProcessor<TRequest>
     {

@@ -1,13 +1,14 @@
-using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Commands;
-using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Models;
-using GovHospitalApp.Core.Application.Interface;
-using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Hospitals.Commands;
+using Application.Hospitals.Models;
+using Application.Interfaces;
+using Moq;
 using Xunit;
+using Hospital = Domain.Entities.Hospital;
 
-namespace GovHospitalApp.Tests.Core.Applications.Hospitals.Commands
+namespace Tests.Core.Application.Hospitals.Commands
 {
     public class EditHospitalTest
     {
@@ -30,13 +31,13 @@ namespace GovHospitalApp.Tests.Core.Applications.Hospitals.Commands
             mockAppDbRepository
                 .Setup(x => x.GetHospitalByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(
-                new GovHospitalApp.Core.Domain.Entities.Hospital()
-                {
-                    HospitalId = hospitalId
-                });
+                    new Hospital
+                    {
+                        HospitalId = hospitalId
+                    });
 
             mockAppDbRepository
-                .Setup(x => x.EditHospitalByIdAsync(It.IsAny<Guid>(), It.IsAny<GovHospitalApp.Core.Domain.Entities.Hospital>()))
+                .Setup(x => x.EditHospitalByIdAsync(It.IsAny<Guid>(), It.IsAny<Hospital>()))
                 .Returns(Task.CompletedTask);
 
             var handler = new EditHospital.Handler(mockAppDbRepository.Object);

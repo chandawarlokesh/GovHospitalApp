@@ -1,9 +1,9 @@
-using GovHospitalApp.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Domain.Entities;
 
-namespace GovHospitalApp.Core.Application.Interface
+namespace Application.Interfaces
 {
     public interface IAppDbRepository
     {

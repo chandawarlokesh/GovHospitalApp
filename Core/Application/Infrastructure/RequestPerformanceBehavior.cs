@@ -1,23 +1,24 @@
-using MediatR;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
-namespace GovHospitalApp.Core.Application.Infrastructure
+namespace Application.Infrastructure
 {
-    public class RequestPerformaceBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class RequestPerformanceBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
+        private readonly ILogger<RequestPerformanceBehavior<TRequest, TResponse>> _logger;
         private readonly Stopwatch _timer;
-        private readonly ILogger<RequestPerformaceBehavior<TRequest, TResponse>> _logger;
 
-        public RequestPerformaceBehavior(ILogger<RequestPerformaceBehavior<TRequest, TResponse>> logger)
+        public RequestPerformanceBehavior(ILogger<RequestPerformanceBehavior<TRequest, TResponse>> logger)
         {
             _timer = new Stopwatch();
             _logger = logger;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
+            RequestHandlerDelegate<TResponse> next)
         {
             _timer.Start();
             var response = await next();

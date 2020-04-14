@@ -1,25 +1,25 @@
+using Application.Patients.Commands;
 using FluentValidation;
-using GovHospitalApp.Core.Application.Infrastructure.Patients.Commands;
 
-namespace GovPatientApp.Core.Application.Infrastructure.Patients.Validators
+namespace Application.Patients.Validators
 {
     public class SavePatientCommandValidator : AbstractValidator<SavePatient.Command>
     {
         public SavePatientCommandValidator()
         {
-            RuleFor(X => X.Name)
-            .NotEmpty()
-            .MaximumLength(255);
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .MaximumLength(255);
             RuleFor(x => x.MobileNumber)
-            .NotEmpty()
-            .MaximumLength(12);
+                .NotEmpty()
+                .MaximumLength(12);
             RuleFor(x => x.Address)
-            .NotNull();
+                .NotNull();
             RuleFor(x => x.Gender)
-            .NotNull();
+                .NotNull();
             RuleFor(x => x.DateOfBirth)
-            .NotEmpty()
-            .NotNull();
+                .NotEmpty()
+                .NotNull();
         }
     }
 }

@@ -1,15 +1,15 @@
-using GovHospitalApp.Application;
-using GovHospitalApp.Infrastructure;
-using GovHospitalApp.Persistance;
+using System.IO;
+using Application;
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
+using Persistence;
 
-namespace GovHospitalApp
+namespace WebApi
 {
     public class Startup
     {
@@ -27,10 +27,7 @@ namespace GovHospitalApp
             services.AddMvc(opt =>
                 opt.EnableEndpointRouting = false
             );
-            services.AddSpaStaticFiles(config =>
-            {
-                config.RootPath = "../Client/build";
-            });
+            services.AddSpaStaticFiles(config => { config.RootPath = "../Client/build"; });
 
             services.AddPersistence(Configuration);
             services.AddInfrastructure();
@@ -40,10 +37,7 @@ namespace GovHospitalApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
 
@@ -51,10 +45,7 @@ namespace GovHospitalApp
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -63,10 +54,7 @@ namespace GovHospitalApp
             {
                 spa.Options.SourcePath = Path.Join(env.ContentRootPath, "../Client");
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                if (env.IsDevelopment()) spa.UseReactDevelopmentServer("start");
             });
         }
     }

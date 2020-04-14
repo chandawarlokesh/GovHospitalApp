@@ -1,24 +1,18 @@
-﻿using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Queries;
-using GovHospitalApp.Core.Application.Interface;
-using GovHospitalApp.Core.Domain.Entities;
-using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Hospitals.Queries;
+using Application.Interfaces;
+using Domain.Entities;
+using Moq;
 using Xunit;
 
 namespace Tests.Core.Application.Hospitals.Queries
 {
     public class GetHospitalsTest
     {
-        [Fact]
-        public void Handle_Given_InValid_AppDbRepository_DI_Should_Throw_Exception()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GetHospitals.Handler(null));
-        }
-
         [Fact]
         public async Task Handle_Fetch_Should_GetHospitals_Return_Empty()
         {
@@ -28,7 +22,7 @@ namespace Tests.Core.Application.Hospitals.Queries
             var mockAppDbRepository = new Mock<IAppDbRepository>();
             mockAppDbRepository
                 .Setup(x => x.GetHospitalsAsync())
-                .ReturnsAsync((IEnumerable<Hospital>)null);
+                .ReturnsAsync((IEnumerable<Hospital>) null);
 
             var handler = new GetHospitals.Handler(mockAppDbRepository.Object);
             // Act
@@ -45,15 +39,15 @@ namespace Tests.Core.Application.Hospitals.Queries
             var query = new GetHospitals.Query();
             var hospitals = new List<Hospital>
             {
-                new Hospital()
+                new Hospital
                 {
                     Address = new Address()
                 },
-                new Hospital()
+                new Hospital
                 {
                     Address = new Address()
                 },
-                new Hospital()
+                new Hospital
                 {
                     Address = new Address()
                 }
@@ -69,6 +63,12 @@ namespace Tests.Core.Application.Hospitals.Queries
 
             // Assert
             Assert.Equal(3, result.Count());
+        }
+
+        [Fact]
+        public void Handle_Given_InValid_AppDbRepository_DI_Should_Throw_Exception()
+        {
+            Assert.Throws<ArgumentNullException>(() => new GetHospitals.Handler(null));
         }
     }
 }

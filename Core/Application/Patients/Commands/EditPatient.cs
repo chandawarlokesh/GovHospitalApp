@@ -1,22 +1,23 @@
-using GovHospitalApp.Core.Application.Exceptions;
-using GovHospitalApp.Core.Application.Interface;
-using GovHospitalApp.Core.Application.Notifications.Models;
-using GovHospitalApp.Core.Application.Patients.Models;
-using GovHospitalApp.Core.Domain.Enumerations;
-using MediatR;
-using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Exceptions;
+using Application.Interfaces;
+using Application.Notifications.Models;
+using Application.Patients.Models;
+using Domain.Enumerations;
+using MediatR;
+using Newtonsoft.Json;
 
-namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Commands
+namespace Application.Patients.Commands
 {
     public sealed class EditPatient
     {
         public sealed class Command : IRequest<Guid>
         {
             [JsonConstructor]
-            public Command(Guid id, string name, DateTime dateOfBirth, int gender, Address address, string mobileNumber, Guid? hospitalId)
+            public Command(Guid id, string name, DateTime dateOfBirth, int gender, Address address, string mobileNumber,
+                Guid? hospitalId)
             {
                 Id = id;
                 Name = name;
@@ -44,40 +45,34 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Commands
             public Handler(IAppDbRepository appDbRepository, INotificationService notificationService)
             {
                 _appDbRepository = appDbRepository ??
-                                            throw new ArgumentNullException(nameof(appDbRepository));
+                                   throw new ArgumentNullException(nameof(appDbRepository));
                 _notificationService = notificationService ??
-                                            throw new ArgumentNullException(nameof(notificationService));
+                                       throw new ArgumentNullException(nameof(notificationService));
             }
 
             public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
             {
                 var existingPatient = await _appDbRepository.GetPatientByIdAsync(request.Id);
-                if (existingPatient == null)
-                {
-                    throw new NotFoundException(nameof(Patient), request.Id);
-                }
+                if (existingPatient == null) throw new NotFoundException(nameof(Patient), request.Id);
 
                 var patientHospitalId = request.HospitalId;
                 if (request.HospitalId != null)
                 {
                     var hospital = await _appDbRepository.GetHospitalByIdAsync(request.HospitalId.Value);
 
-                    if (hospital == null)
-                    {
-                        throw new NotFoundException(nameof(Patient), request.HospitalId);
-                    }
+                    if (hospital == null) throw new NotFoundException(nameof(Patient), request.HospitalId);
                     patientHospitalId = hospital.HospitalId;
                 }
 
-                var patient = new Domain.Entities.Patient()
+                var patient = new Domain.Entities.Patient
                 {
                     PatientId = request.Id,
                     Name = request.Name,
                     DateOfBirth = request.DateOfBirth,
-                    Gender = (GenderType)request.Gender,
+                    Gender = (GenderType) request.Gender,
                     MobileNumber = request.MobileNumber,
                     HospitalId = patientHospitalId,
-                    Address = new Domain.Entities.Address()
+                    Address = new Domain.Entities.Address
                     {
                         Street = request.Address.Street,
                         City = request.Address.City,
@@ -86,10 +81,10 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Commands
                     }
                 };
                 await _appDbRepository.EditPatientByIdAsync(request.Id, patient);
-                _notificationService.Send(new Message()
+                _notificationService.Send(new Message
                 {
-                    text = $"Patient updated with the id {request.Id}",
-                    payload = patient
+                    Text = $"Patient updated with the id {request.Id}",
+                    Payload = patient
                 });
                 return request.Id;
             }

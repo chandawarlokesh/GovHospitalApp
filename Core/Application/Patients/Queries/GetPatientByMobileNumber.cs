@@ -1,11 +1,11 @@
-using GovHospitalApp.Core.Application.Interface;
-using MediatR;
-using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
+using MediatR;
+using Newtonsoft.Json;
 
-namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Queries
+namespace Application.Patients.Queries
 {
     public sealed class GetPatientByMobileNumber
     {
@@ -27,21 +27,15 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Queries
             public Handler(IAppDbRepository appDbRepository)
             {
                 _appDbRepository = appDbRepository ??
-                                            throw new ArgumentNullException(nameof(appDbRepository));
+                                   throw new ArgumentNullException(nameof(appDbRepository));
             }
 
             public async Task<Guid> Handle(Query request, CancellationToken cancellationToken)
             {
-                if (string.IsNullOrWhiteSpace(request.MobileNumber))
-                {
-                    throw new ArgumentNullException();
-                }
+                if (string.IsNullOrWhiteSpace(request.MobileNumber)) throw new ArgumentNullException();
 
                 var patient = await _appDbRepository.GetPatientIdByMobileNumberAsync(request.MobileNumber);
-                if (patient == null)
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                if (patient == null) throw new UnauthorizedAccessException();
                 return patient.PatientId;
             }
         }

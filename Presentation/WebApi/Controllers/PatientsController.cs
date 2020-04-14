@@ -1,18 +1,18 @@
-using GovHospitalApp.Core.Application.Infrastructure.Patients.Commands;
-using GovHospitalApp.Core.Application.Infrastructure.Patients.Queries;
-using GovHospitalApp.Core.Application.Patients.Models;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Patients.Commands;
+using Application.Patients.Models;
+using Application.Patients.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace GovHospitalApp.Controllers
+namespace WebApi.Controllers
 {
     public class PatientsController : BaseController
     {
-        public PatientsController(IMediator mediator, ILogger<PatientsController> logger) : base(mediator, logger)
+        public PatientsController(IMediator mediator, ILogger logger) : base(mediator, logger)
         {
         }
 
@@ -21,14 +21,14 @@ namespace GovHospitalApp.Controllers
         public async Task<IEnumerable<Patient>> GetAllPatientAsync()
         {
             var query = new GetPatients.Query();
-            return await _mediator.Send(query);
+            return await Mediator.Send(query);
         }
 
         [HttpGet("login/{mobileNumber}")]
         public async Task<Guid> Login([FromRoute] string mobileNumber)
         {
             var query = new GetPatientByMobileNumber.Query(mobileNumber);
-            return await _mediator.Send(query);
+            return await Mediator.Send(query);
         }
 
         [HttpGet("{patientId}")]
@@ -41,24 +41,22 @@ namespace GovHospitalApp.Controllers
             }
 
             var query = new GetPatient.Query(patientId);
-            return await _mediator.Send(query);
+            return await Mediator.Send(query);
         }
 
         [HttpPost]
         public async Task<Guid> SavePatientAsync([FromBody] SavePatient.Command command)
         {
-            return await _mediator.Send(command);
+            return await Mediator.Send(command);
         }
 
         [HttpPost("{id}")]
-        public async Task<ActionResult<Guid>> EditPatientAsync([FromRoute] Guid id, [FromBody] EditPatient.Command command)
+        public async Task<ActionResult<Guid>> EditPatientAsync([FromRoute] Guid id,
+            [FromBody] EditPatient.Command command)
         {
-            if (id != command.Id)
-            {
-                ModelState.AddModelError(nameof(id), "Id should be match");
-                return BadRequest();
-            }
-            return await _mediator.Send(command);
+            if (id == command.Id) return await Mediator.Send(command);
+            ModelState.AddModelError(nameof(id), "Id should be match");
+            return BadRequest();
         }
     }
 }

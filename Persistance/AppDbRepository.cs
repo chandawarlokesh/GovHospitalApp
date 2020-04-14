@@ -1,13 +1,13 @@
-using GovHospitalApp.Core.Application.Interface;
-using GovHospitalApp.Core.Domain.Entities;
-using GovHospitalApp.Core.Infrastructure.Persistance.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Interfaces;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Models;
 
-namespace GovHospitalApp.Core.Infrastructure.Persistance
+namespace Persistence
 {
     public class AppDbRepository : IAppDbRepository
     {
@@ -52,7 +52,7 @@ namespace GovHospitalApp.Core.Infrastructure.Persistance
             existingPatient.DateOfBirth = patient.DateOfBirth;
             existingPatient.MobileNumber = patient.MobileNumber;
             existingPatient.HospitalId = patient.HospitalId;
-            existingPatient.Gender = (int)patient.Gender;
+            existingPatient.Gender = (int) patient.Gender;
             existingPatient.Address = SqlAddress.FromDomain(patient.Address);
 
             // _context.Update(SqlPatient.ToDomain(patient));

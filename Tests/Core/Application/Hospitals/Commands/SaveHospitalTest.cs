@@ -1,13 +1,14 @@
-using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Commands;
-using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Models;
-using GovHospitalApp.Core.Application.Interface;
-using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Hospitals.Commands;
+using Application.Hospitals.Models;
+using Application.Interfaces;
+using Moq;
 using Xunit;
+using Hospital = Domain.Entities.Hospital;
 
-namespace GovHospitalApp.Tests.Core.Applications.Hospitals.Commands
+namespace Tests.Core.Application.Hospitals.Commands
 {
     public class SaveHospitalTest
     {
@@ -27,7 +28,7 @@ namespace GovHospitalApp.Tests.Core.Applications.Hospitals.Commands
 
             var mockAppDbRepository = new Mock<IAppDbRepository>();
             mockAppDbRepository
-                .Setup(x => x.AddHospitalAsync(It.IsAny<GovHospitalApp.Core.Domain.Entities.Hospital>()))
+                .Setup(x => x.AddHospitalAsync(It.IsAny<Hospital>()))
                 .Returns(Task.CompletedTask);
 
             var handler = new SaveHospital.Handler(mockAppDbRepository.Object);

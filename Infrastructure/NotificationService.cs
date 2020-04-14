@@ -1,8 +1,8 @@
-using GovHospitalApp.Core.Application.Interface;
-using GovHospitalApp.Core.Application.Notifications.Models;
 using System;
+using Application.Interfaces;
+using Application.Notifications.Models;
 
-namespace GovHospitalApp.Infrastructure
+namespace Infrastructure
 {
     public class NotificationService : INotificationService
     {

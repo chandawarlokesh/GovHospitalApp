@@ -1,4 +1,4 @@
-namespace GovHospitalApp.Core.Domain.Entities
+namespace Domain.Entities
 {
     public class Address
     {

@@ -1,22 +1,16 @@
-using GovHospitalApp.Core.Application.Infrastructure.Patients.Queries;
-using GovHospitalApp.Core.Application.Interface;
-using GovHospitalApp.Core.Domain.Entities;
-using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
+using Application.Patients.Queries;
+using Domain.Entities;
+using Moq;
 using Xunit;
 
 namespace Tests.Core.Application.Patients.Queries
 {
     public class GetPatientByMobileNumberTest
     {
-        [Fact]
-        public void Handle_Given_InValid_AppDbRepository_DI_Should_Throw_Exception()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GetPatientByMobileNumber.Handler(null));
-        }
-
         [Fact]
         public async Task Handle_Fetch_Given_Empty_Should_GetPatient_Should_Throw_Exception()
         {
@@ -26,12 +20,13 @@ namespace Tests.Core.Application.Patients.Queries
             var mockAppDbRepository = new Mock<IAppDbRepository>();
             mockAppDbRepository
                 .Setup(x => x.GetPatientIdByMobileNumberAsync(It.IsAny<string>()))
-                .ReturnsAsync((Patient)null);
+                .ReturnsAsync((Patient) null);
 
             var handler = new GetPatientByMobileNumber.Handler(mockAppDbRepository.Object);
             // Act
             // Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await handler.Handle(query, new CancellationToken()));
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+                await handler.Handle(query, new CancellationToken()));
         }
 
         [Fact]
@@ -43,12 +38,13 @@ namespace Tests.Core.Application.Patients.Queries
             var mockAppDbRepository = new Mock<IAppDbRepository>();
             mockAppDbRepository
                 .Setup(x => x.GetPatientIdByMobileNumberAsync(It.IsAny<string>()))
-                .ReturnsAsync((Patient)null);
+                .ReturnsAsync((Patient) null);
 
             var handler = new GetPatientByMobileNumber.Handler(mockAppDbRepository.Object);
             // Act
             // Assert
-            await Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await handler.Handle(query, new CancellationToken()));
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
+                await handler.Handle(query, new CancellationToken()));
         }
 
         [Fact]
@@ -57,7 +53,7 @@ namespace Tests.Core.Application.Patients.Queries
             // Arrange
             var mobileNumber = "9021433312";
             var query = new GetPatientByMobileNumber.Query(mobileNumber);
-            var patient = new Patient()
+            var patient = new Patient
             {
                 PatientId = Guid.NewGuid(),
                 Address = new Address(),
@@ -74,6 +70,12 @@ namespace Tests.Core.Application.Patients.Queries
 
             // Assert
             Assert.NotEqual(Guid.Empty, result);
+        }
+
+        [Fact]
+        public void Handle_Given_InValid_AppDbRepository_DI_Should_Throw_Exception()
+        {
+            Assert.Throws<ArgumentNullException>(() => new GetPatientByMobileNumber.Handler(null));
         }
     }
 }

@@ -1,8 +1,8 @@
-using GovHospitalApp.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using Domain.Entities;
 
-namespace GovHospitalApp.Core.Infrastructure.Persistance.Models
+namespace Persistence.Models
 {
     public class SqlHospital
     {
@@ -15,22 +15,25 @@ namespace GovHospitalApp.Core.Infrastructure.Persistance.Models
         public virtual ICollection<SqlPatient> Patients { get; set; }
 
         public Hospital ToDomain()
-        =>
-            new Hospital()
+        {
+            return new Hospital
             {
                 HospitalId = Id,
                 Name = Name,
                 MobileNumber = MobileNumber,
                 Address = Address.ToDomain()
             };
+        }
+
         public static SqlHospital FromDomain(Hospital hospital)
-        =>
-            new SqlHospital()
+        {
+            return new SqlHospital
             {
                 Id = hospital.HospitalId,
                 Name = hospital.Name,
                 MobileNumber = hospital.MobileNumber,
                 Address = SqlAddress.FromDomain(hospital.Address)
             };
+        }
     }
 }

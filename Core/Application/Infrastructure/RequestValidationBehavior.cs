@@ -1,11 +1,12 @@
-using FluentValidation;
-using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
+using MediatR;
+using ValidationException = Application.Exceptions.ValidationException;
 
-namespace GovHospitalApp.Core.Application.Infrastructure
+namespace Application.Infrastructure
 {
     public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
@@ -16,7 +17,8 @@ namespace GovHospitalApp.Core.Application.Infrastructure
             _validators = validators;
         }
 
-        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
+            RequestHandlerDelegate<TResponse> next)
         {
             var context = new ValidationContext(request);
             var failures = _validators
@@ -25,10 +27,7 @@ namespace GovHospitalApp.Core.Application.Infrastructure
                 .Where(f => f != null)
                 .ToList();
 
-            if (failures.Any())
-            {
-                throw new Exceptions.ValidationException(failures);
-            }
+            if (failures.Any()) throw new ValidationException(failures);
 
             return next();
         }

@@ -1,18 +1,18 @@
 using System;
 
-namespace GovHospitalApp.Core.Application.Exceptions
+namespace Application.Exceptions
 {
     public abstract class PublicException : Exception
     {
-        public PublicException()
+        protected PublicException()
         {
         }
 
-        public PublicException(string message) : base(message)
+        protected PublicException(string message) : base(message)
         {
         }
 
-        public PublicException(string message, Exception innerException) : base(message, innerException)
+        protected PublicException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

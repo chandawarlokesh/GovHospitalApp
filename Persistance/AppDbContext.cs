@@ -1,15 +1,17 @@
-using GovHospitalApp.Core.Infrastructure.Persistance.Models;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Models;
 
-namespace GovHospitalApp.Core.Infrastructure.Persistance
+namespace Persistence
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
+        public AppDbContext(DbContextOptions options)
+            : base(options)
         {
-
         }
+
+        public DbSet<SqlHospital> Hospitals { get; set; }
+        public DbSet<SqlPatient> Patients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,10 +25,6 @@ namespace GovHospitalApp.Core.Infrastructure.Persistance
                 .WithOne(p => p.Hospital)
                 .HasForeignKey(x => x.HospitalId)
                 .IsRequired(false);
-
         }
-
-        public DbSet<SqlHospital> Hospitals { get; set; }
-        public DbSet<SqlPatient> Patients { get; set; }
     }
 }

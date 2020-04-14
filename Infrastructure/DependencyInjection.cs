@@ -1,7 +1,7 @@
-using GovHospitalApp.Core.Application.Interface;
+using Application.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GovHospitalApp.Infrastructure
+namespace Infrastructure
 {
     public static class DependencyInjection
     {

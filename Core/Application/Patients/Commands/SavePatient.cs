@@ -1,14 +1,15 @@
-﻿using GovHospitalApp.Core.Application.Interface;
-using GovHospitalApp.Core.Application.Notifications.Models;
-using GovHospitalApp.Core.Application.Patients.Models;
-using GovHospitalApp.Core.Domain.Enumerations;
-using MediatR;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
+using Application.Notifications.Models;
+using Application.Patients.Models;
+using Domain.Enumerations;
+using MediatR;
+using Newtonsoft.Json;
+using Patient = Domain.Entities.Patient;
 
-namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Commands
+namespace Application.Patients.Commands
 {
     public sealed class SavePatient
     {
@@ -39,30 +40,27 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Commands
             public Handler(IAppDbRepository appDbRepository, INotificationService notificationService)
             {
                 _appDbRepository = appDbRepository ??
-                                            throw new ArgumentNullException(nameof(appDbRepository));
-                _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+                                   throw new ArgumentNullException(nameof(appDbRepository));
+                _notificationService =
+                    notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             }
 
             public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
             {
-
                 var existingPatient = await _appDbRepository.GetPatientIdByMobileNumberAsync(request.MobileNumber);
-                if (existingPatient != null)
-                {
-                    throw new SystemException();
-                }
+                if (existingPatient != null) throw new SystemException();
 
                 var patientHospitalId = await _appDbRepository.GetHospitalIdByZipCode(request.Address.ZipCode);
                 var patientId = Guid.NewGuid();
-                var patient = new Domain.Entities.Patient()
+                var patient = new Patient
                 {
                     PatientId = patientId,
                     Name = request.Name,
                     DateOfBirth = request.DateOfBirth,
-                    Gender = (GenderType)request.Gender,
+                    Gender = (GenderType) request.Gender,
                     MobileNumber = request.MobileNumber,
                     HospitalId = patientHospitalId,
-                    Address = new Domain.Entities.Address()
+                    Address = new Domain.Entities.Address
                     {
                         Street = request.Address.Street,
                         City = request.Address.City,
@@ -71,10 +69,10 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Patients.Commands
                     }
                 };
                 await _appDbRepository.AddPatientAsync(patient);
-                _notificationService.Send(new Message()
+                _notificationService.Send(new Message
                 {
-                    text = $"Patient created with the id {patientId}",
-                    payload = patient
+                    Text = $"Patient created with the id {patientId}",
+                    Payload = patient
                 });
                 return patientId;
             }

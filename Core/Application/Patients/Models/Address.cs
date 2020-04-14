@@ -1,4 +1,4 @@
-namespace GovHospitalApp.Core.Application.Patients.Models
+namespace Application.Patients.Models
 {
     public class Address
     {

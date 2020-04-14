@@ -1,6 +1,6 @@
 using System;
 
-namespace GovHospitalApp.Core.Application.Infrastructure.Hospitals.Models
+namespace Application.Hospitals.Models
 {
     public class Hospital
     {

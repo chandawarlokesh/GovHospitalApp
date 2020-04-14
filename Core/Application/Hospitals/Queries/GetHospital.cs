@@ -1,12 +1,12 @@
-using GovHospitalApp.Core.Application.Exceptions;
-using GovHospitalApp.Core.Application.Infrastructure.Hospitals.Models;
-using GovHospitalApp.Core.Application.Interface;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Exceptions;
+using Application.Hospitals.Models;
+using Application.Interfaces;
+using MediatR;
 
-namespace GovHospitalApp.Core.Application.Infrastructure.Hospitals.Queries
+namespace Application.Hospitals.Queries
 {
     public sealed class GetHospital
     {
@@ -27,16 +27,13 @@ namespace GovHospitalApp.Core.Application.Infrastructure.Hospitals.Queries
             public Handler(IAppDbRepository appDbRepository)
             {
                 _appDbRepository = appDbRepository ??
-                                            throw new ArgumentNullException(nameof(appDbRepository));
+                                   throw new ArgumentNullException(nameof(appDbRepository));
             }
 
             public async Task<Hospital> Handle(Query request, CancellationToken cancellationToken)
             {
                 var hospital = await _appDbRepository.GetHospitalByIdAsync(request.Id);
-                if (hospital == null)
-                {
-                    throw new NotFoundException(nameof(Hospital), request.Id);
-                }
+                if (hospital == null) throw new NotFoundException(nameof(Hospital), request.Id);
                 return ToHospitalViewModel(hospital);
             }
 

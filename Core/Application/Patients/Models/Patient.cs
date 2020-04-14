@@ -1,11 +1,12 @@
-using GovHospitalApp.Core.Domain.Enumerations;
 using System;
+using Domain.Enumerations;
 
-namespace GovHospitalApp.Core.Application.Patients.Models
+namespace Application.Patients.Models
 {
     public class Patient
     {
-        public Patient(Guid id, string name, DateTime dateOfBirth, GenderType gender, Address address, string mobileNumber, Guid? hospitalId)
+        public Patient(Guid id, string name, DateTime dateOfBirth, GenderType gender, Address address,
+            string mobileNumber, Guid? hospitalId)
         {
             Id = id;
             Name = name;
